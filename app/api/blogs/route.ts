@@ -1,15 +1,12 @@
-import { NextResponse } from "next/server";
+import { createHandler, errorHandler, successHandler } from "@/utils/handler";
 import { addPost, getPosts } from "@/lib/data";
-import  errorHandler  from "@/utils/errorHandler";
 
 export async function GET(req: Request, res: Response) {
     try {
         const posts = getPosts();
-        return NextResponse.json({ message: `OK`, posts }, {
-            status: 200
-        });
+        return successHandler(posts);
     } catch (error) {
-        errorHandler(error as Error);
+        return errorHandler(error as Error);
     }
 }
 
@@ -17,10 +14,8 @@ export async function POST(req: Request, res: Response) {
     try {
         const reqBody = await req.json();
         const post = addPost(reqBody);
-        return NextResponse.json({ message: `OK`, post }, {
-            status: 201
-        });
+        return createHandler(post);
     } catch (error) {
-        errorHandler(error as Error);
+        return errorHandler(error as Error);
     }
 }
