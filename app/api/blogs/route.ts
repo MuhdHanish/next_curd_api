@@ -1,5 +1,5 @@
-import { createHandler, errorHandler, successHandler } from "@/utils/handler";
 import { addPost, getPosts } from "@/lib/data";
+import { createHandler, errorHandler, successHandler } from "@/utils/handlers";
 
 export async function GET(req: Request, res: Response) {
     try {
