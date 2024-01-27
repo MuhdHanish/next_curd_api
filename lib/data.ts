@@ -3,7 +3,7 @@ export interface IPost {
     id: string;
     title: string;
     description: string;
-    date: Date;
+    createdAt: Date;
     updatedAt?: Date;
 };
 
@@ -14,7 +14,7 @@ export const getPosts = () => {
 };
 
 export const addPost = (post: IPost) => {
-    const postData = { ...post, id: (++id).toString(), date: new Date() };
+    const postData = { ...post, id: (++id).toString(), createdAt: new Date() };
     posts.push(postData);
     return postData;
 };
@@ -33,7 +33,7 @@ export const updatePostById = (id: string, updatedPostData: Partial<IPost>) => {
             return keysToInclude.includes(propertyKey) && updatedPostData[propertyKey] !== posts[index][propertyKey];
         });
         if (isDataChanged) {
-            posts[index] = { ...posts[index], ...updatedPostData, id, date: posts[index].date, updatedAt: new Date() };
+            posts[index] = { ...posts[index], ...updatedPostData, id, createdAt: posts[index].createdAt, updatedAt: new Date() };
             return posts[index];
         } else {
             return posts[index];
