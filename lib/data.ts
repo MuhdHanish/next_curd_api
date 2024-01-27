@@ -4,6 +4,7 @@ export interface IPost {
     title: string;
     description: string;
     date: Date;
+    updatedAt?: Date;
 };
 
 let posts: IPost[] = [];
@@ -25,9 +26,18 @@ export const getPostById = (id: string) => {
 
 export const updatePostById = (id: string, updatedPostData: Partial<IPost>) => {
   const index = posts.findIndex((post) => post.id === id);
-    if (index !== -1) {
-        posts[index] = { ...posts[index], ...updatedPostData };
-        return posts[index];
+     if (index !== -1) {
+        const keysToInclude: Array<keyof IPost> = ['title', 'description'];
+        const isDataChanged = Object.keys(updatedPostData).some((key) => {
+            const propertyKey = key as keyof IPost;
+            return keysToInclude.includes(propertyKey) && updatedPostData[propertyKey] !== posts[index][propertyKey];
+        });
+        if (isDataChanged) {
+            posts[index] = { ...posts[index], ...updatedPostData, id, date: posts[index].date, updatedAt: new Date() };
+            return posts[index];
+        } else {
+            return posts[index];
+        }
     } else {
         return null;
     }
