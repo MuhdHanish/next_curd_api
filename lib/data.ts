@@ -21,7 +21,7 @@ export const addPost = (post: IPost) => {
 
 export const getPostById = (id: string) => {
     const post = posts.find((post) => post.id === id);
-    return post;
+    return post ? post : null;
 };
 
 export const updatePostById = (id: string, updatedPostData: Partial<IPost>) => {
