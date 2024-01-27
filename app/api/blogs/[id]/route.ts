@@ -1,38 +1,46 @@
-import { getPostById, updatePostById } from "@/lib/data";
-import { NextResponse } from "next/server";
-import  errorHandler  from "@/utils/errorHandler";
+import { deletePostById, getPostById, updatePostById } from "@/lib/data";
+import { errorHandler, notFoundHandler, successHandler } from "@/utils/handlers";
 
-export async function GET(req: Request, res: Response) {
+interface IRequestParams {
+    id: string
+};
+
+export async function GET(req: Request, { params }: { params: IRequestParams } , res: Response) {
     try {
-        const id = req.url.split(`blogs/`)[1];
+        const id = params.id.trim();
         const post = getPostById(id);
         if (post) {
-            return NextResponse.json({ message: `OK`, post }, {
-            status: 200
-         });
+            return successHandler(post);
         }
-        return NextResponse.json({ message: `Post with ID ${id} not found` }, {
-            status: 404
-        });
+        return notFoundHandler(`Post with ID ${id} not found`);
     } catch (error) {
-        errorHandler(error as Error);
+        return errorHandler(error as Error);
     }
 };
 
-export async function PUT(req: Request, res: Response) {
+export async function PUT(req: Request, { params }: { params: IRequestParams } , res: Response) {
     try {
-        const id = req.url.split(`blogs/`)[1];
+        const id = params.id.trim();
         const reqBody = await req.json();
         const post = updatePostById(id, reqBody);
         if (post) {
-            return NextResponse.json({ message: `OK`, post }, {
-            status: 200
-         });
+            return successHandler(post);
         }
-        return NextResponse.json({ message: `Post with ID ${id} not found` }, {
-            status: 404
-        });
+        return notFoundHandler(`Post with ID ${id} not found`);
     } catch (error) {
-        errorHandler(error as Error);
+        return errorHandler(error as Error);
+    }
+};
+
+export async function DELETE(req: Request, { params }: { params: IRequestParams } , res: Response) {
+    try {
+        const id = params.id.trim();
+        const post = deletePostById(id);
+        if (post) {
+            return successHandler();
+        }
+        return notFoundHandler(`Post with ID ${id} not found`);
+    } catch (error) {
+        return errorHandler(error as Error);
     }
 };
