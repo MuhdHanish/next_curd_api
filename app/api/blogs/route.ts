@@ -15,8 +15,8 @@ export async function GET(req: Request, res: Response) {
 
 export async function POST(req: Request, res: Response) {
     try {
-        const reqJson = await req.json();
-        const post = addPost(reqJson);
+        const reqBody = await req.json();
+        const post = addPost(reqBody);
         return NextResponse.json({ message: `OK`, post }, {
             status: 201
         });
