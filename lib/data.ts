@@ -1,6 +1,6 @@
 let id: number = 0;
 export interface IPost {
-    id: number;
+    id: string;
     title: string;
     description: string;
     date: Date;
@@ -13,33 +13,31 @@ export const getPosts = () => {
 };
 
 export const addPost = (post: IPost) => {
-    const postData = { ...post, id: ++id, date: new Date() };
+    const postData = { ...post, id: (++id).toString(), date: new Date() };
     posts.push(postData);
     return postData;
 };
 
-export const getPostById = (id: number) => {
+export const getPostById = (id: string) => {
     const post = posts.find((post) => post.id === id);
-    if (!post) {
-        throw new Error(`Post with ID ${id} not found`);
-    }
     return post;
 };
 
-export const updatePostById = (id: number, updatedPostData: Partial<IPost>) => {
+export const updatePostById = (id: string, updatedPostData: Partial<IPost>) => {
   const index = posts.findIndex((post) => post.id === id);
     if (index !== -1) {
         posts[index] = { ...posts[index], ...updatedPostData };
         return posts[index];
     } else {
-        throw new Error(`Post with ID ${id} not found`);
+        return null;
     }
 };
 
-export const deletePostById = (id: number) => {
+export const deletePostById = (id: string) => {
     const initialLength = posts.length;
     posts = posts.filter((post) => post.id !== id);
     if (posts.length === initialLength) {
-        throw new Error(`Post with ID ${id} not found`);
+        return false;
     }
+    return true;
 };
